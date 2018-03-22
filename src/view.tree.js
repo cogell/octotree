@@ -121,9 +121,13 @@ class TreeView {
 
     // refocus after complete so that keyboard navigation works, fix #158
     const refocusAfterCompletion = () => {
-      $(document).one('pjax:success page:load', () => {
-        this.$jstree.get_container().focus()
-      })
+      const refocus = () => this.$jstree.get_container().focus();
+      $(document)
+        .one('pjax:success page:load', () => { // happens when navigating between files
+          refocus()
+        }).one('scroll', () => { // happens when navigating between hrefs when viewing PR
+          refocus()
+        })
     }
 
     const adapter = this.adapter
